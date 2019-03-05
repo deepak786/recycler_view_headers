@@ -14,7 +14,6 @@ import android.widget.TextView;
  */
 
 public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
-
     private final int headerOffset;
     private final boolean sticky;
     private final SectionCallback sectionCallback;
@@ -30,28 +29,22 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-        super.getItemOffsets(outRect,
-                view,
-                parent,
-                state);
+        super.getItemOffsets(outRect, view, parent, state);
 
         int pos = parent.getChildAdapterPosition(view);
-        if (sectionCallback.isSection(pos)) {
+        if (pos > RecyclerView.NO_POSITION && sectionCallback.isSection(pos)) {
             outRect.top = headerOffset;
         }
     }
 
     @Override
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-        super.onDrawOver(c,
-                parent,
-                state);
+        super.onDrawOver(c, parent, state);
 
         if (headerView == null) {
             headerView = inflateHeaderView(parent);
-            header = (TextView) headerView.findViewById(R.id.list_item_section_text);
-            fixLayoutSize(headerView,
-                    parent);
+            header = headerView.findViewById(R.id.list_item_section_text);
+            fixLayoutSize(headerView, parent);
         }
 
         CharSequence previousHeader = "";
@@ -59,13 +52,13 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
             View child = parent.getChildAt(i);
             final int position = parent.getChildAdapterPosition(child);
 
-            CharSequence title = sectionCallback.getSectionHeader(position);
-            header.setText(title);
-            if (!previousHeader.equals(title) || sectionCallback.isSection(position)) {
-                drawHeader(c,
-                        child,
-                        headerView);
-                previousHeader = title;
+            if (position > RecyclerView.NO_POSITION) {
+                CharSequence title = sectionCallback.getSectionHeader(position);
+                header.setText(title);
+                if (!previousHeader.equals(title) || sectionCallback.isSection(position)) {
+                    drawHeader(c, child, headerView);
+                    previousHeader = title;
+                }
             }
         }
     }
@@ -73,22 +66,16 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
     private void drawHeader(Canvas c, View child, View headerView) {
         c.save();
         if (sticky) {
-            c.translate(0,
-                    Math.max(0,
-                            child.getTop() - headerView.getHeight()));
+            c.translate(0, Math.max(0, child.getTop() - headerView.getHeight()));
         } else {
-            c.translate(0,
-                    child.getTop() - headerView.getHeight());
+            c.translate(0, child.getTop() - headerView.getHeight());
         }
         headerView.draw(c);
         c.restore();
     }
 
     private View inflateHeaderView(RecyclerView parent) {
-        return LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recycler_section_header,
-                        parent,
-                        false);
+        return LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_section_header, parent, false);
     }
 
     /**
@@ -108,13 +95,9 @@ public class RecyclerSectionItemDecoration extends RecyclerView.ItemDecoration {
                 parent.getPaddingTop() + parent.getPaddingBottom(),
                 view.getLayoutParams().height);
 
-        view.measure(childWidth,
-                childHeight);
+        view.measure(childWidth, childHeight);
 
-        view.layout(0,
-                0,
-                view.getMeasuredWidth(),
-                view.getMeasuredHeight());
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
     }
 
     public interface SectionCallback {

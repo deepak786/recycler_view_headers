@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         return new RecyclerSectionItemDecoration.SectionCallback() {
             @Override
             public boolean isSection(int position) {
-                return position > RecyclerView.NO_POSITION && (position == 0
+                return /*position > RecyclerView.NO_POSITION && */(position == 0
                         || people.get(position)
                         .getLastName()
                         .charAt(0) != people.get(position - 1)
@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public CharSequence getSectionHeader(int position) {
-                return position > RecyclerView.NO_POSITION ? people.get(position)
+                return /*position > RecyclerView.NO_POSITION ? */people.get(position)
                         .getLastName()
                         .subSequence(0,
-                                1) : "";
+                                1) /*: ""*/;
             }
         };
     }
