@@ -1,6 +1,8 @@
 
 Simple Recycler View Section Header implementation
 
+** Updated with Add and Remove actions
+
 License
 -------
 
